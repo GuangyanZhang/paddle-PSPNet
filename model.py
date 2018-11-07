@@ -42,8 +42,11 @@ def avg_pool(x, kernel_size, stride_size, padding = 'VALID', name = ''):
 def concat(inputs, axis = -1, name = ''):
     return paddle.fluid.layers.concat(inputs, axis = axis)
 
-def add(x, y, name = ''):
-    return paddle.fluid.layers.elementwise_add(x, y)
+def add(x, y, with_relu = True, name = ''):
+    if with_relu:
+        return paddle.fluid.layers.elementwise_add(x, y, act = 'relu')
+    else:
+        return paddle.fluid.layers.elementwise_add(x, y)
 
 def batch_normalization(x, relu = False, name = ''):
     if relu:
