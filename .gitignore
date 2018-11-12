@@ -1,6 +1,11 @@
 # Dataset
 VOCdevkit/
 data/
+img.pkl
+lab.pkl
+
+# VSCode
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
