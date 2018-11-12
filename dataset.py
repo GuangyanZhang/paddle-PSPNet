@@ -30,24 +30,27 @@ class VOC:
 
         self.input_transform = input_transform
         self.target_transform = target_transform
-        self.img = []
-        self.lab = []
-        if os.path.isfile(img_pkl_path):
-            print '[info] loading datasets with saved pkl file.'
-            load_img = open(img_pkl_path, 'rb')
-            load_lab = open(lab_pkl_path, 'rb')
-            for _ in range(self.len()):
-                self.img.append(pickle.load(load_img))
-                self.lab.append(pickle.load(load_lab))
-        else:
+        self.count_data = self.len()
+        self.index = 0
+        if not(os.path.isfile(img_pkl_path)):
             dump_img = open(img_pkl_path, 'wb')
             dump_lab = open(lab_pkl_path, 'wb')
-            for i in range(self.len()):
+            for i in range(self.count_data):
                 img, lab = self.getitem(i)
                 pickle.dump(img, dump_img, -1)
                 pickle.dump(lab, dump_lab, -1)
-                if (i%10 == 0):
-                    print(i/10)
+            dump_img.close()
+            dump_lab.close()            
+        print '[info] loading datasets with saved pkl file.'
+        load_img = open(img_pkl_path, 'rb')
+        load_lab = open(lab_pkl_path, 'rb')
+        self.image = []
+        self.label = []
+        for _ in range(self.count_data):
+            self.image.append(pickle.load(load_img))
+            self.label.append(pickle.load(load_lab))
+        load_img.close()
+        load_lab.close()           
 
     def getitem(self, index):
         filename = self.filenames[index]
@@ -66,3 +69,14 @@ class VOC:
 
     def len(self):
         return len(self.filenames)
+
+    def get_batch(self, bath_size):
+        img = []
+        lab = []
+        for _ in range(bath_size):
+            if (self.index == self.count_data):
+                self.index = 0
+            img.append(self.image[self.index])
+            lab.append(self.label[self.index])
+            self.index += 1
+        return img, lab
