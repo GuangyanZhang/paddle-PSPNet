@@ -27,6 +27,8 @@ class VOC:
         img_pkl_path = root + img_pkl_path
         lab_pkl_path = root + lab_pkl_path
 
+        self.count_data = 2913
+
         if not(os.path.isfile(img_pkl_path)):
             self.filenames = [image_basename(f)
                 for f in os.listdir(self.labels_root) if is_image(f)]
@@ -34,8 +36,6 @@ class VOC:
 
             self.input_transform = input_transform
             self.target_transform = target_transform
-            self.count_data = self.len()
-            self.index = 0
 
             dump_img = open(img_pkl_path, 'wb')
             dump_lab = open(lab_pkl_path, 'wb')
@@ -46,6 +46,7 @@ class VOC:
             dump_img.close()
             dump_lab.close()
         print '[info] loading datasets with saved pkl file.'
+        self.index = 0
         load_img = open(img_pkl_path, 'rb')
         load_lab = open(lab_pkl_path, 'rb')
         self.image = []
@@ -55,7 +56,6 @@ class VOC:
             self.label.append(pickle.load(load_lab))
         load_img.close()
         load_lab.close()
-        self.count_data = len(self.label)
 
     def getitem(self, index):
         filename = self.filenames[index]
