@@ -3,6 +3,7 @@ import pickle
 
 import numpy as np
 from PIL import Image
+import random
 
 EXTENSIONS = ['.jpg', '.png']
 
@@ -50,7 +51,7 @@ class VOC:
             self.image.append(pickle.load(load_img))
             self.label.append(pickle.load(load_lab))
         load_img.close()
-        load_lab.close()           
+        load_lab.close()
 
     def getitem(self, index):
         filename = self.filenames[index]
@@ -70,13 +71,28 @@ class VOC:
     def len(self):
         return len(self.filenames)
 
-    def get_batch(self, bath_size):
+    def random_crop(self, img, mask, width, height):
+        assert img.shape[0] >= height
+        assert img.shape[1] >= width
+        assert img.shape[0] == mask.shape[0]
+        assert img.shape[1] == mask.shape[1]
+        x = random.randint(0, img.shape[1] - width)
+        y = random.randint(0, img.shape[0] - height)
+        img = img[y:y+height, x:x+width]
+        mask = mask[y:y+height, x:x+width]
+        return img, mask
+
+    def get_batch(self, bath_size, width, height):
         img = []
         lab = []
         for _ in range(bath_size):
             if (self.index == self.count_data):
                 self.index = 0
-            img.append(self.image[self.index])
-            lab.append(self.label[self.index])
+            croped_img, croped_mask = self.random_crop(np.array(self.image[self.index]), 
+                                                       np.array(self.label[self.index]), 
+                                                       width, 
+                                                       height)
+            img.append(croped_img)
+            lab.append(croped_mask)
             self.index += 1
         return img, lab
