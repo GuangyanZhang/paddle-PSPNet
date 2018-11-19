@@ -27,15 +27,16 @@ class VOC:
         img_pkl_path = root + img_pkl_path
         lab_pkl_path = root + lab_pkl_path
 
-        self.filenames = [image_basename(f)
-            for f in os.listdir(self.labels_root) if is_image(f)]
-        self.filenames.sort()
-
-        self.input_transform = input_transform
-        self.target_transform = target_transform
-        self.count_data = self.len()
-        self.index = 0
         if not(os.path.isfile(img_pkl_path)):
+            self.filenames = [image_basename(f)
+                for f in os.listdir(self.labels_root) if is_image(f)]
+            self.filenames.sort()
+
+            self.input_transform = input_transform
+            self.target_transform = target_transform
+            self.count_data = self.len()
+            self.index = 0
+
             dump_img = open(img_pkl_path, 'wb')
             dump_lab = open(lab_pkl_path, 'wb')
             for i in range(self.count_data):
@@ -43,7 +44,7 @@ class VOC:
                 pickle.dump(img, dump_img, -1)
                 pickle.dump(lab, dump_lab, -1)
             dump_img.close()
-            dump_lab.close()            
+            dump_lab.close()
         print '[info] loading datasets with saved pkl file.'
         load_img = open(img_pkl_path, 'rb')
         load_lab = open(lab_pkl_path, 'rb')
@@ -54,6 +55,7 @@ class VOC:
             self.label.append(pickle.load(load_lab))
         load_img.close()
         load_lab.close()
+        self.count_data = len(self.label)
 
     def getitem(self, index):
         filename = self.filenames[index]
