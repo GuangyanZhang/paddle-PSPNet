@@ -58,14 +58,4 @@ def get_shape(x):
     return paddle.fluid.layers.shape(x)[3:4]
 
 def resize_bilinear(x, shape, name = ''):
-    """
-    paddle.fluid.layers.resize_bilinear(input, out_shape=None, scale=None, name=None)
-
-    args:	
-    input (Variable) – The input tensor of bilinear interpolation, This is a 4-D tensor with shape of (N x C x h x w).
-    out_shape (Variable) – This is a 1-D tensor with two number. The first number is height and the second number is width.
-
-    return:	
-    The dimension of output is (N x C x out_h x out_w).
-    """
     return paddle.fluid.layers.resize_bilinear(x, shape, name = name)
