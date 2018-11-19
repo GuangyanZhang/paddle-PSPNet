@@ -24,6 +24,8 @@ class VOC:
     def __init__(self, root, img_pkl_path = 'img.pkl', lab_pkl_path = 'lab.pkl', input_transform=None, target_transform=None):
         self.images_root = os.path.join(root, 'images')
         self.labels_root = os.path.join(root, 'classes')
+        img_pkl_path = root + img_pkl_path
+        lab_pkl_path = root + lab_pkl_path
 
         self.filenames = [image_basename(f)
             for f in os.listdir(self.labels_root) if is_image(f)]
