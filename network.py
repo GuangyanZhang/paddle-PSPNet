@@ -136,6 +136,8 @@ def conv5_3_pool(x, shape):
     conv5_3_pool2_interp = block_conv5_3_pool(x, shape, 45, 2)
     conv5_3_pool3_interp = block_conv5_3_pool(x, shape, 30, 3)
     conv5_3_pool6_interp = block_conv5_3_pool(x, shape, 15, 6)
+    print(x)
+    print(conv5_3_pool6_interp)
 
     group = [x, conv5_3_pool6_interp, conv5_3_pool3_interp, conv5_3_pool2_interp, conv5_3_pool1_interp]
     layer = concat(group, axis=1, name='conv5_3_concat')
