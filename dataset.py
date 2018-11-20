@@ -115,9 +115,9 @@ class VOC:
             lab.append(croped_mask)
             self.index += 1
         img = np.array(img).astype('float32')
-        print(img)
+        print(img.shape())
         lab = np.array(lab).astype('int64')
-        print(lab)
+        print(lab.shape()
         return img, lab
 
     def get_reader(self, bath_size, width, height):
