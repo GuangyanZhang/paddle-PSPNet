@@ -46,7 +46,10 @@ def conv2(x, num):
 
 def block_conv3(layer, idx):
     name = 'conv3_' + str(idx)
-    layer = conv(layer ,1, 128, 1, name=name + '_1x1_reduce')
+    if idx == 0:
+        layer = conv(layer ,1, 128, 2, name=name + '_1x1_reduce')
+    else:
+        layer = conv(layer ,1, 128, 1, name=name + '_1x1_reduce')
     layer = batch_normalization(layer, relu=True, name=name + '_1x1_reduce_bn')
     layer = conv(layer, 3, 128, 1, name=name + '_3x3')
     layer = batch_normalization(layer, relu=True, name=name + '_3x3_bn')
