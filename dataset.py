@@ -115,14 +115,12 @@ class VOC:
             lab.append(croped_mask)
             self.index += 1
         img = np.array(img).astype('float32')
-        print(img.shape)
         lab = np.array(lab).astype('int64')
-        print(lab.shape)
-        result = [img, lab]
-        return result
+        return img, lab
 
     def get_reader(self, bath_size, width, height):
         def reader():
             for _ in range(self.count_data / bath_size):
-                yield self.get_batch(bath_size, width, height)
+                img, lab = self.get_batch(bath_size, width, height)
+                yield img, lab
         return reader
