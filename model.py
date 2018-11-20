@@ -21,7 +21,7 @@ def atrous_conv(x, kernel_size, channel_num, dilation, padding = 'SAME', name = 
     return  paddle.fluid.layers.conv2d(x, channel_num, kernel_size, padding = padding_size, bias_attr = None, name = name)
 
 def relu(x, name = ''):
-    return paddle.fluid.layers.relu(x, name = name)
+    return paddle.fluid.layers.relu(x)
 
 def max_pool(x, kernel_size, stride_size, padding = 'SAME', name = ''):
     validate_padding(padding)
