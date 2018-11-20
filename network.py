@@ -130,12 +130,12 @@ def block_conv5_3_pool(layer, shape, pool_size, idx):
     return layer
 
 
-def conv5_3_pool(x, shape):
+def conv5_3_pool(x, factor, shape):
 
-    conv5_3_pool1_interp = block_conv5_3_pool(x, shape, 90, 1)
-    conv5_3_pool2_interp = block_conv5_3_pool(x, shape, 45, 2)
-    conv5_3_pool3_interp = block_conv5_3_pool(x, shape, 30, 3)
-    conv5_3_pool6_interp = block_conv5_3_pool(x, shape, 15, 6)
+    conv5_3_pool1_interp = block_conv5_3_pool(x, shape, 6 * factor, 1)
+    conv5_3_pool2_interp = block_conv5_3_pool(x, shape, 3 * factor, 2)
+    conv5_3_pool3_interp = block_conv5_3_pool(x, shape, 2 * factor, 3)
+    conv5_3_pool6_interp = block_conv5_3_pool(x, shape, 1 * factor, 6)
 
     group = [x, conv5_3_pool6_interp, conv5_3_pool3_interp, conv5_3_pool2_interp, conv5_3_pool1_interp]
     layer = concat(group, axis=1, name='conv5_3_concat')
@@ -150,10 +150,12 @@ def PSPNet101(x, num_classes, shape):
     layer = conv4(layer, 23)
     layer = conv5(layer, 3)
 
-    layer = conv5_3_pool(layer, shape)
+    layer = conv5_3_pool(layer, 15, [shape[0] / 8, shape[1] / 8])
     layer = conv(layer, 3, 512, 1, padding='SAME', name='conv5_4')
     layer = batch_normalization(layer, relu=True, name='conv5_4_bn')
     layer = conv(layer, 1, num_classes, 1, name='conv6')
+
+    layer = resize_bilinear(layer, shape)
     return layer
 
 
@@ -171,7 +173,7 @@ def PSPNet50(x, num_classes, shape):
     layer = conv5(layer, 3)
     print(layer)
 
-    layer = conv5_3_pool(layer, [shape[0] / 8, shape[0] / 8])
+    layer = conv5_3_pool(layer, 10, [shape[0] / 8, shape[1] / 8])
     layer = conv(layer, 3, 512, 1, padding='SAME', name='conv5_4')
     layer = batch_normalization(layer, relu=True, name='conv5_4_bn')
     layer = conv(layer, 1, num_classes, 1, name='conv6')
