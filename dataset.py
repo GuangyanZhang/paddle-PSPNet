@@ -78,15 +78,15 @@ class VOC:
     def random_crop_or_pad(self, img, mask, width, height):
         assert img.shape[0] == mask.shape[0]
         assert img.shape[1] == mask.shape[1]
-        
+
         if img.shape[0] >= height:
             y = random.randint(0, img.shape[0] - height)
             img = img[y:y+height, :]
             mask = mask[y:y+height, :]
         else:
             y = random.randint(0, height - img.shape[0])
-            img = np.pad(img, [[0, 0], [y, height - img.shape[0] - y], [0, 0], [0, 0]], 'constant')
-            mask = np.pad(mask, [[0, 0], [y, height - img.shape[0] - y], [0, 0], [0, 0]], 'constant')
+            img = np.pad(img, [[y, height - img.shape[0] - y], [0, 0], [0, 0]], 'constant')
+            mask = np.pad(mask, [[y, height - img.shape[0] - y], [0, 0], [0, 0]], 'constant')
 
         if img.shape[1] >= width:
             x = random.randint(0, img.shape[1] - width)
@@ -94,8 +94,8 @@ class VOC:
             mask = mask[:, x:x+width]
         else:
             x = random.randint(0, width - img.shape[1])
-            img = np.pad(img, [[0, 0], [0, 0], [x, width - img.shape[1] - x], [0, 0]], 'constant')
-            mask = np.pad(mask, [[0, 0], [0, 0], [x, width - img.shape[1] - x], [0, 0]], 'constant')
+            img = np.pad(img, [[0, 0], [x, width - img.shape[1] - x], [0, 0]], 'constant')
+            mask = np.pad(mask, [[0, 0], [x, width - img.shape[1] - x], [0, 0]], 'constant')
         return img, mask
 
     def get_batch(self, bath_size, width, height):
@@ -112,4 +112,4 @@ class VOC:
             img.append(croped_img)
             lab.append(croped_mask)
             self.index += 1
-        return img, lab
+        return np.array(img).astype('float32'), np.array(lab).astype('int64')
