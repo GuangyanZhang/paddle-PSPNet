@@ -54,8 +54,5 @@ def batch_normalization(x, relu = False, name = ''):
     else:
         return paddle.fluid.layers.batch_norm(x, name = name)
 
-def get_shape(x):
-    return paddle.fluid.layers.shape(x)[3:4]
-
 def resize_bilinear(x, shape, name = ''):
     return paddle.fluid.layers.resize_bilinear(x, shape, name = name)
