@@ -43,9 +43,9 @@ def concat(inputs, axis = -1, name = ''):
     return paddle.fluid.layers.concat(inputs, axis = axis, name = name)
 
 def add(x, y, with_relu = True, name = ''):
-    # print("----------[add]----------")
-    # print(x)
-    # print(y)
+    print("----------[add]----------")
+    print(x)
+    print(y)
     if with_relu:
         return paddle.fluid.layers.elementwise_add(x, y, act = 'relu', name = name)
     else:
