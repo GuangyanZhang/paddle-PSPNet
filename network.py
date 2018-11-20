@@ -136,8 +136,6 @@ def conv5_3_pool(x, shape):
     conv5_3_pool2_interp = block_conv5_3_pool(x, shape, 45, 2)
     conv5_3_pool3_interp = block_conv5_3_pool(x, shape, 30, 3)
     conv5_3_pool6_interp = block_conv5_3_pool(x, shape, 15, 6)
-    print(x)
-    print(conv5_3_pool6_interp)
 
     group = [x, conv5_3_pool6_interp, conv5_3_pool3_interp, conv5_3_pool2_interp, conv5_3_pool1_interp]
     layer = concat(group, axis=1, name='conv5_3_concat')
@@ -161,11 +159,17 @@ def PSPNet101(x, num_classes, shape):
 
 def PSPNet50(x, num_classes, shape):
     layer = x
+    print(layer)
     layer = conv1(layer)
+    print(layer)
     layer = conv2(layer, 3)
+    print(layer)
     layer = conv3(layer, 4)
+    print(layer)
     layer = conv4(layer, 6)
+    print(layer)
     layer = conv5(layer, 3)
+    print(layer)
 
     layer = conv5_3_pool(layer, shape)
     layer = conv(layer, 3, 512, 1, padding='SAME', name='conv5_4')
