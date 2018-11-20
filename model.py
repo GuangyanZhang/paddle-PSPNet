@@ -15,7 +15,7 @@ def conv(x, kernel_size, channel_num, stride_size = 1, padding = 'SAME', name = 
 def atrous_conv(x, kernel_size, channel_num, dilation, padding = 'SAME', name = ''):
     validate_padding(padding)
     if padding == 'SAME':
-        padding_size = ((kernel_size - 1) / 2) + (dilation - 1)
+        padding_size = ((kernel_size - 1) / 2)
     else:
         padding_size = 0
     return  paddle.fluid.layers.conv2d(x, channel_num, kernel_size, padding = padding_size, bias_attr = None, name = name)
