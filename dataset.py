@@ -85,8 +85,9 @@ class VOC:
             mask = mask[y:y+height, :]
         else:
             y = random.randint(0, height - img.shape[0])
-            img = np.pad(img, [[y, height - img.shape[0] - y], [0, 0], [0, 0]], 'constant')
-            mask = np.pad(mask, [[y, height - img.shape[0] - y], [0, 0]], 'constant')
+            shape = [y, height - img.shape[0] - y]
+            img = np.pad(img, [shape, [0, 0], [0, 0]], 'constant')
+            mask = np.pad(mask, [shape, [0, 0]], 'constant')
 
         if img.shape[1] >= width:
             x = random.randint(0, img.shape[1] - width)
@@ -94,8 +95,9 @@ class VOC:
             mask = mask[:, x:x+width]
         else:
             x = random.randint(0, width - img.shape[1])
-            img = np.pad(img, [[0, 0], [x, width - img.shape[1] - x], [0, 0]], 'constant')
-            mask = np.pad(mask, [[0, 0], [x, width - img.shape[1] - x]], 'constant')
+            shape = [x, width - img.shape[1] - x]
+            img = np.pad(img, [[0, 0], shape, [0, 0]], 'constant')
+            mask = np.pad(mask, [[0, 0], shape], 'constant')
         return img, mask
 
     def get_batch(self, bath_size, width, height):
