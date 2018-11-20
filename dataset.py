@@ -75,15 +75,27 @@ class VOC:
     def len(self):
         return len(self.filenames)
 
-    def random_crop(self, img, mask, width, height):
-        assert img.shape[0] >= height
-        assert img.shape[1] >= width
+    def random_crop_or_pad(self, img, mask, width, height):
         assert img.shape[0] == mask.shape[0]
         assert img.shape[1] == mask.shape[1]
-        x = random.randint(0, img.shape[1] - width)
-        y = random.randint(0, img.shape[0] - height)
-        img = img[y:y+height, x:x+width]
-        mask = mask[y:y+height, x:x+width]
+        
+        if img.shape[0] >= height:
+            y = random.randint(0, img.shape[0] - height)
+            img = img[y:y+height, :]
+            mask = mask[y:y+height, :]
+        else:
+            y = random.randint(0, height - img.shape[0])
+            img = np.pad(img, [[0, 0], [y, height - img.shape[0] - y], [0, 0], [0, 0]], 'constant')
+            mask = np.pad(mask, [[0, 0], [y, height - img.shape[0] - y], [0, 0], [0, 0]], 'constant')
+
+        if img.shape[1] >= width:
+            x = random.randint(0, img.shape[1] - width)
+            img = img[:, x:x+width]
+            mask = mask[:, x:x+width]
+        else:
+            x = random.randint(0, width - img.shape[1])
+            img = np.pad(img, [[0, 0], [0, 0], [x, width - img.shape[1] - x], [0, 0]], 'constant')
+            mask = np.pad(mask, [[0, 0], [0, 0], [x, width - img.shape[1] - x], [0, 0]], 'constant')
         return img, mask
 
     def get_batch(self, bath_size, width, height):
@@ -92,10 +104,11 @@ class VOC:
         for _ in range(bath_size):
             if (self.index == self.count_data):
                 self.index = 0
-            croped_img, croped_mask = self.random_crop(np.array(self.image[self.index]), 
-                                                       np.array(self.label[self.index]), 
-                                                       width, 
-                                                       height)
+            croped_img, croped_mask = \
+                    self.random_crop_or_pad(np.array(self.image[self.index]), 
+                                            np.array(self.label[self.index]), 
+                                            width, 
+                                            height)
             img.append(croped_img)
             lab.append(croped_mask)
             self.index += 1
