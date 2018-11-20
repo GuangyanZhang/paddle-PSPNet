@@ -117,7 +117,7 @@ class VOC:
         img = np.array(img).astype('float32')
         print(img.shape())
         lab = np.array(lab).astype('int64')
-        print(lab.shape()
+        print(lab.shape())
         return img, lab
 
     def get_reader(self, bath_size, width, height):
