@@ -161,17 +161,11 @@ def PSPNet101(x, num_classes, shape):
 
 def PSPNet50(x, num_classes, shape):
     layer = x
-    print(layer)
     layer = conv1(layer)
-    print(layer)
     layer = conv2(layer, 3)
-    print(layer)
     layer = conv3(layer, 4)
-    print(layer)
     layer = conv4(layer, 6)
-    print(layer)
     layer = conv5(layer, 3)
-    print(layer)
 
     layer = conv5_3_pool(layer, 10, [shape[0] / 8, shape[1] / 8])
     layer = conv(layer, 3, 512, 1, padding='SAME', name='conv5_4')
