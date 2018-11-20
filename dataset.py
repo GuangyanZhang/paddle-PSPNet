@@ -118,9 +118,11 @@ class VOC:
         lab = np.array(lab).astype('int64')
         return img, lab
 
-    def get_reader(self, bath_size, width, height):
+    def get_reader(self, width, height):
         def reader():
-            for _ in range(self.count_data / bath_size):
-                img, lab = self.get_batch(bath_size, width, height)
-                yield img, lab
+            for i in range(self.count_data):
+                yield self.random_crop_or_pad(np.array(self.image[i]), 
+                                            np.array(self.label[i]), 
+                                            width, 
+                                            height)
         return reader
