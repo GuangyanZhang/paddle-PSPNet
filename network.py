@@ -171,8 +171,10 @@ def PSPNet50(x, num_classes, shape):
     layer = conv5(layer, 3)
     print(layer)
 
-    layer = conv5_3_pool(layer, shape)
+    layer = conv5_3_pool(layer, [shape[0] / 8, shape[0] / 8])
     layer = conv(layer, 3, 512, 1, padding='SAME', name='conv5_4')
     layer = batch_normalization(layer, relu=True, name='conv5_4_bn')
     layer = conv(layer, 1, num_classes, 1, name='conv6')
+
+    layer = resize_bilinear(layer, shape)
     return layer
