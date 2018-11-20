@@ -116,6 +116,8 @@ class VOC:
             self.index += 1
         return np.array(img).astype('float32'), np.array(lab).astype('int64')
 
-    def reader(self, bath_size, width, height):
-        for i in range(self.count_data / bath_size):
-            yield self.get_batch(bath_size, width, height)
+    def get_reader(self, bath_size, width, height):
+        def reader():
+            for _ in range(self.count_data / bath_size):
+                yield self.get_batch(bath_size, width, height)
+        return reader
